@@ -9,42 +9,43 @@ const loader = document.getElementById("loader");
 let apiQuotes = [];
 
 // Showing the Loader:
-const loading = () => {
+const showLoadingSpinner = () => {
   loader.hidden = false;
   quoteContainer.hidden = true;
 };
 // Hiding the Loader:
-const complete = () => {
+const removeLoadingSpinner = () => {
   quoteContainer.hidden = false;
   loader.hidden = true;
 };
 
 // Get New Quote:
 const newQuote = () => {
-  loading();
+  showLoadingSpinner();
   // Picking a random Quote from apiQuotes array:
-  const quote = apiQuotes[Math.floor(Math.random() * apiQuotes.length)];
+  const randomQuote = apiQuotes[Math.floor(Math.random() * apiQuotes.length)];
   // Check if Author is Blank & replace it with Unknown:
-  !quote.author
+  !randomQuote.author
     ? (authorText.textContent = "Author is Unknown")
-    : (authorText.textContent = quote.author);
+    : (authorText.textContent = randomQuote.author);
 
   // Check for Quote length & determine a styling:
-  quote.text.length > 50
+  randomQuote.text.length > 50
     ? quoteText.classList.add("long-quote")
     : quoteText.classList.remove("long-quote");
   // Set Quote & Hide Loader:
-  quoteText.textContent = quote.text;
-  complete();
+  quoteText.textContent = randomQuote.text;
+  removeLoadingSpinner();
 };
 
 // Get Quotes from API:
 const getQuotes = async () => {
-  loading();
+  showLoadingSpinner();
   const apiURL = "https://type.fit/api/quotes";
   try {
     const response = await fetch(apiURL);
     apiQuotes = await response.json();
+    console.log(apiQuotes);
     newQuote();
     // complete();
   } catch (error) {
